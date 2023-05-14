@@ -1,25 +1,15 @@
 import requests
-import json
+from bs4 import BeautifulSoup
 
-# Clave de API y ID de búsqueda personalizada
-API_KEY = "tu_clave_de_API"
-SEARCH_ENGINE_ID = "tu_ID_de_busqueda_personalizada"
+def search_web(query, url):
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    results = []
+    for link in soup.find_all('a'):
+        if query in link.get_text().lower():
+            results.append(link.get('href'))
+    return results
 
-# Realizar una solicitud HTTP a la API de Google Custom Search
-url = f"https://www.googleapis.com/customsearch/v1?key={API_KEY}&cx={SEARCH_ENGINE_ID}&q={''}&num=100"
-response = requests.get(url)
-
-# Verificar que la respuesta sea correcta
-if response.status_code == 200:
-    # Analizar la respuesta JSON
-    data = json.loads(response.text)
-
-    # Verificar si la clave "items" está en el diccionario
-    if "items" in data:
-        # Mostrar los títulos de los resultados de búsqueda
-        for idx, item in enumerate(data["items"]):
-            print(f"{idx + 1}. {item['title']}")
-    else:
-        print("No se encontraron resultados de búsqueda.")
-else:
-    print(f"Error al realizar la solicitud: {response.status_code}")
+search_results = search_web('python', 'https://www.python.org')
+for i in search_results:
+    print(i)
