@@ -1,3 +1,32 @@
+import time
+import pygame
+
+# Definir las constantes de la pantalla
+SCREEN_WIDTH = 500
+SCREEN_HEIGHT = 500
+CELL_SIZE = 20
+
+# Definir los colores
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+# Inicializar Pygame
+pygame.init()
+
+# Crear la pantalla
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+# Dibujar la cuadrícula
+def draw_grid(maze):
+    for row in range(len(maze)):
+        for col in range(len(maze[0])):
+            if maze[row][col] == 1:
+                color = BLACK
+            else:
+                color = WHITE
+            pygame.draw.rect(screen, color, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+    pygame.display.update()
+
 def backtrack_search(n):
     # Crear un tablero vacío de tamaño n x n
     board = [[0 for _ in range(n)] for _ in range(n)]
@@ -10,6 +39,8 @@ def backtrack(board, n, row):
         return board
     # Para cada columna, intentar colocar una reina en la fila actual
     for col in range(n):
+        time.sleep(0.05)
+        draw_grid(board)
         if is_valid(board, n, row, col):
             # Si es una posición válida, colocar la reina en el tablero
             board[row][col] = 1
@@ -36,7 +67,7 @@ def is_valid(board, n, row, col):
                     return False
     # Si no hay conflictos, la posición es válida
     return True
-
+ 
 solution = backtrack_search(8)
 if solution is not None:
     print("Solución encontrada:")
