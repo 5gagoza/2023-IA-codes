@@ -10,6 +10,6 @@ def search_web(query, url):
             results.append(link.get('href'))
     return results
 
-search_results = search_web('python', 'https://www.python.org')
+search_results = search_web('py', 'https://www.python.org')
 for i in search_results:
     print(i)
